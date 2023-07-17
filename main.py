@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 from pygame import gfxdraw
+from random import randint
 """
 Doom Fire
 https://www.youtube.com/watch?v=6hE5sEh0pwI
@@ -19,6 +20,15 @@ class DoomFire:
         self.palette = self.get_palette()
         self.fire_array = self.get_fire_array()
 
+    def do_fire(self):
+        """
+        """
+        for x in range(FIRE_WIDTH):
+            for y in range(1, FIRE_HEIGHT):
+                color_index = self.fire_array[y][x]
+                if color_index:
+                    self.fire_array[y - 1][x] = color_index - 1
+
     def draw_fire(self):
         """
         The 0 index does not interest us because it will be black
@@ -28,7 +38,7 @@ class DoomFire:
                 if color_index:
                     color = self.palette[color_index]
                     # draw fire particles
-                    gfxdraw.box(self.app.screen, (x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE - 1, 
+                    gfxdraw.box(self.app.screen, (x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE - 1,
                                                   PIXEL_SIZE - 1), color)
 
     def get_fire_array(self):
@@ -42,7 +52,7 @@ class DoomFire:
         return fire_array
 
     def draw_palette(self):
-        """display each color of this palette as a square 
+        """display each color of this palette as a square
         """
         size = 90
         for i, color in enumerate(self.palette):
@@ -60,7 +70,7 @@ class DoomFire:
         return palette
 
     def update(self):
-        pass
+        self.do_fire()
 
     def draw(self):
         #self.draw_palette()
