@@ -11,7 +11,9 @@ WIN_SIZE = WIDTH, HEIGHT = 1600, 900
 STEPS_BETWEEN_COLORS = 9
 COLORS = ['black', 'red', 'orange', 'yellow', 'white']
 PIXEL_SIZE = 4
-FIRE_WIDTH = WIDTH // PIXEL_SIZE
+
+FIRE_REPS = 4
+FIRE_WIDTH = WIDTH // (PIXEL_SIZE * FIRE_REPS)
 FIRE_HEIGHT = HEIGHT // PIXEL_SIZE
 
 class DoomFire:
@@ -19,6 +21,8 @@ class DoomFire:
         self.app = app
         self.palette = self.get_palette()
         self.fire_array = self.get_fire_array()
+        # create a surface for fire repetition
+        self.fire_surf = pg.Surface([PIXEL_SIZE * FIRE_WIDTH, HEIGHT])
 
     def do_fire(self):
         """
@@ -41,13 +45,16 @@ class DoomFire:
         """
         The 0 index does not interest us because it will be black
         """
+        self.fire_surf.fill('black')
         for y, row in enumerate(self.fire_array):
             for x, color_index in enumerate(row):
                 if color_index:
                     color = self.palette[color_index]
                     # draw fire particles
-                    gfxdraw.box(self.app.screen, (x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE,
+                    gfxdraw.box(self.fire_surf, (x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE,
                                                   PIXEL_SIZE), color)
+        for i in range(FIRE_REPS):
+            self.app.screen.blit(self.fire_surf, (self.fire_surf.get_width() * i, 0))
 
     def get_fire_array(self):
         """Create a 2d array for our fire
