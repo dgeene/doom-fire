@@ -30,6 +30,12 @@ class DoomFire:
                     rnd = randint(0, 3) # makes the fire effect somewhat
                     # using modulo prevents us from going outside index range
                     self.fire_array[y - 1][(x - rnd + 1) % FIRE_WIDTH] = color_index - rnd % 2
+                else:
+                    """
+                    if a 0 color index has reached some particle. flame has gone out.
+                    so spread black particles upwards
+                    """
+                    self.fire_array[y - 1][x] = 0
 
     def draw_fire(self):
         """
