@@ -8,9 +8,9 @@ https://www.youtube.com/watch?v=6hE5sEh0pwI
 """
 
 WIN_SIZE = WIDTH, HEIGHT = 1600, 900
-STEPS_BETWEEN_COLORS = 7
+STEPS_BETWEEN_COLORS = 9
 COLORS = ['black', 'red', 'orange', 'yellow', 'white']
-PIXEL_SIZE = 10
+PIXEL_SIZE = 4
 FIRE_WIDTH = WIDTH // PIXEL_SIZE
 FIRE_HEIGHT = HEIGHT // PIXEL_SIZE
 
@@ -27,8 +27,9 @@ class DoomFire:
             for y in range(1, FIRE_HEIGHT):
                 color_index = self.fire_array[y][x]
                 if color_index:
-                    rnd = randint(0, 1) # makes the fire effect somewhat
-                    self.fire_array[y - 1][x] = color_index - rnd
+                    rnd = randint(0, 3) # makes the fire effect somewhat
+                    # using modulo prevents us from going outside index range
+                    self.fire_array[y - 1][(x - rnd + 1) % FIRE_WIDTH] = color_index - rnd % 2
 
     def draw_fire(self):
         """
@@ -39,8 +40,8 @@ class DoomFire:
                 if color_index:
                     color = self.palette[color_index]
                     # draw fire particles
-                    gfxdraw.box(self.app.screen, (x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE - 1,
-                                                  PIXEL_SIZE - 1), color)
+                    gfxdraw.box(self.app.screen, (x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE,
+                                                  PIXEL_SIZE), color)
 
     def get_fire_array(self):
         """Create a 2d array for our fire
