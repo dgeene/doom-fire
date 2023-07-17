@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+from pygame import gfxdraw
 """
 Doom Fire
 https://www.youtube.com/watch?v=6hE5sEh0pwI
@@ -8,14 +9,41 @@ https://www.youtube.com/watch?v=6hE5sEh0pwI
 WIN_SIZE = WIDTH, HEIGHT = 1600, 900
 STEPS_BETWEEN_COLORS = 4
 COLORS = ['black', 'red', 'orange', 'yellow', 'white']
+PIXEL_SIZE = 10
+FIRE_WIDTH = WIDTH // PIXEL_SIZE
+FIRE_HEIGHT = HEIGHT // PIXEL_SIZE
 
 class DoomFire:
     def __init__(self, app):
         self.app = app
         self.palette = self.get_palette()
+        self.fire_array = self.get_fire_array()
+
+    def draw_fire(self):
+        """
+        The 0 index does not interest us because it will be black
+        """
+        for y, row in enumerate(self.fire_array):
+            for x, color_index in enumerate(row):
+                if color_index:
+                    color = self.palette[color_index]
+                    # draw fire particles
+                    gfxdraw.box(self.app.screen, (x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE - 1, 
+                                                  PIXEL_SIZE - 1), color)
+
+    def get_fire_array(self):
+        """Create a 2d array for our fire
+
+        Assign the last color value of the palette to the elements of the last row
+        """
+        fire_array = [[0 for i in range(FIRE_WIDTH)] for j in range(FIRE_HEIGHT)]
+        for i in range(FIRE_WIDTH):
+            fire_array[FIRE_HEIGHT - 1][i] = len(self.palette) - 1
+        return fire_array
 
     def draw_palette(self):
-        # display each color of this palette as a square 
+        """display each color of this palette as a square 
+        """
         size = 90
         for i, color in enumerate(self.palette):
             pg.draw.rect(self.app.screen, color, (i * size, HEIGHT // 2, size - 5, size - 5))
@@ -35,7 +63,8 @@ class DoomFire:
         pass
 
     def draw(self):
-        self.draw_palette()
+        #self.draw_palette()
+        self.draw_fire()
 
 
 class App:
