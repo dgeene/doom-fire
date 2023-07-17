@@ -8,7 +8,7 @@ https://www.youtube.com/watch?v=6hE5sEh0pwI
 """
 
 WIN_SIZE = WIDTH, HEIGHT = 1600, 900
-STEPS_BETWEEN_COLORS = 4
+STEPS_BETWEEN_COLORS = 7
 COLORS = ['black', 'red', 'orange', 'yellow', 'white']
 PIXEL_SIZE = 10
 FIRE_WIDTH = WIDTH // PIXEL_SIZE
@@ -27,7 +27,8 @@ class DoomFire:
             for y in range(1, FIRE_HEIGHT):
                 color_index = self.fire_array[y][x]
                 if color_index:
-                    self.fire_array[y - 1][x] = color_index - 1
+                    rnd = randint(0, 1) # makes the fire effect somewhat
+                    self.fire_array[y - 1][x] = color_index - rnd
 
     def draw_fire(self):
         """
